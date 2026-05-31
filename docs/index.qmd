@@ -21,6 +21,150 @@ format:
       data-background-size: cover
 ---
 
+# **Função read_schools**{data-background-image="Capa.png" style="text-align:center"}
+
+## **O que a base representa?**
+
+
+A função **read_schools()** disponibiliza a localização geográfica das escolas brasileiras a partir dos dados do Censo Escolar.
+
+:::: columns
+
+::: {.column width="50%"}
+::: box-orange
+**Características principais:**
+
+- Dados oficiais do INEP;
+- Cada registro representa uma escola;
+- Geometria do tipo POINT;
+- Sistema de referência: SIRGAS 2000 (CRS 4674).
+- Nível territorial: Estabelecimento de ensino (escola).
+:::
+:::
+
+::: {.column width="45%"}
+::: box-orange
+**Aplicações:**
+
+- Planejamento educacional;
+- Estudos de acessibilidade;
+- Distribuição espacial das escolas;
+- Análises territoriais.
+:::
+:::
+
+::::
+
+## **Explorando a função**
+
+**Sintaxe**
+
+:::: columns
+
+::: {.column width="35%"}
+library(geobr)
+
+schools <- read_schools( <br>
+  year,<br>
+  code_muni = "all",<br>
+  output = "sf",<br>
+  showProgress = TRUE,<br>
+  cache = TRUE,<br>
+  verbose = TRUE    )
+:::
+
+::: {.column width="60%"}
+| Argumento    | Função                               |
+| ------------ | -------------------------------------|
+| year         | ano da base                          |
+| code_muni    | código do município                  |
+| output       | tipo de objeto retornado pela função |
+| showProgress | exibe progresso                      |
+| cache        | salva localmente                     |
+| verbose      | apresenta mensagens informativas     |
+
+:::
+::::
+
+<br>
+
+::: box-orange
+**Retorno**
+ Classe: > [1] "sf" "data.frame"
+:::
+
+
+## **Estrutura dos dados**
+
+::: {.panel-tabset}
+
+### Informações disponíveis
+
+- Código da escola;
+- Nome da escola;
+- Município;
+- UF;
+- Coordenadas geográficas;
+- Data de atualização;
+- Geometria espacial.
+- Novidades da atualização
+
+### A nova versão do geobr
+
+1. melhor organização das bases;
+2. armazenamento mais eficiente;
+3. integração com formatos modernos;
+4. melhoria na qualidade das coordenadas espaciais.
+
+**Objetivo principal:** aumentar velocidade e confiabilidade das análises.
+
+:::
+
+## **Mapa: Escolas do Brasil**
+
+<br>
+
+![](Grafico_distribuicao_schools_1.png){fig-align="center" height=100%}
+
+
+## **Sobreposição de camadas **
+
+<br>
+
+![](Grafico_sobreposicao_schools_1.png){fig-align="center" height="100%"}
+
+<br>
+
+## 
+**Interpretação**
+
+<br>
+
+- Cada ponto representa uma escola;
+- Maior concentração nas áreas urbanizadas;
+- Permite visualizar a distribuição espacial nacional.
+
+## **Conclusão**
+
+<br>
+
+✓ A função read_schools() acessa dados georreferenciados do Censo Escolar.
+
+✓ Retorna objetos espaciais do tipo sf.
+
+✓ Trabalha com geometrias do tipo ponto.
+
+✓ Permite visualização espacial simples e sobreposição com outras camadas do geobr.
+
+✓ É útil para planejamento educacional, pesquisa e análise territorial.
+
+<br>
+
+**Fontes:**
+Documentação oficial do Geobr
+INEP — Censo Escolar
+
+
 # **PRIMEIRO CAPÍTULO**{data-background-image="Capa.png" style="text-align:center"}
 
 ## **PRIMEIRA SEÇÃO**
