@@ -1,6 +1,6 @@
 ---
 title: "**PRÁTICA ESTATÍSTICA II**"
-subtitle: "**ATIVIDADE AVALIATIVA 9**"
+subtitle: "<span style='font-size: 20px;'>**ATIVIDADE AVALIATIVA 9**</span>"
 author: "Agatha Dias Roque (<Agathadias@id.uff.br>) <br> Vitor Eduardo Bezerra Ferreira (<ferreiravitor@id.uff.br>)"
 date: today
 date-format: "01/06/2023"
@@ -21,6 +21,246 @@ format:
       data-background-size: cover
 ---
 
+```{r,include=F}
+
+# bibliotecas ####
+
+require(dplyr) # Manipulação de bases de dados
+require(geobr) # Shapefiles do Brasil
+require(ggiraph) # Mapas interativos
+require(ggplot2) # Gráficos
+require(ggsflabel) # Criação de Labels que se repelem
+require(ggspatial) # Rosa dos ventos e escala
+require(readxl) # Leitura de arquivos excel
+require(sf) # Leitura de shapefiles fora do geobr
+require(gtsummary)
+require(openxlsx)
+remotes::install_github("ipeaGIT/geobr", subdir = "r-package")
+devtools::install_github("yutannihilation/ggsflabel")
+
+# Dados ####
+
+Indicadores = read_excel("Indicadores_Municipais.xlsx")
+
+args(read_schools)
+Dados_escola = read_schools(year = 2025,
+                            showProgress = F)
+
+no_esc = read_schools(year = 2025,
+                      showProgress = F) %>% 
+  filter(!st_is_empty(geometry)) %>%
+  nrow()
+no_esc
+
+args(read_semiarid)
+Dados_semi = read_semiarid(year = 2022,
+                           simplified = T,
+                           showProgress = T)
+
+no_semi = read_semiarid(year = 2022,
+                       simplified = T,
+                      showProgress = F) %>% 
+  filter(!st_is_empty(geometry)) %>%
+  nrow()
+no_semi
+
+map_brasil2 = read_country(year=2022,
+                     simplified = T,
+                     showProgress = F)
+  
+regioes_br = read_region(year = 2022,
+                         simplified = T,
+                         showProgress = F)
+
+estados_br = read_state(code_state = "all",
+                        year = 2022, simplified = T,
+                        showProgress = F)
+
+map_regioes = estados_br %>% 
+  filter(code_region %in% c(2, 3))
+
+schools <- read_schools(year=2025)
+
+states <- read_state(year=2025)
+
+schools_muni <- schools %>% 
+  filter(code_muni == 3303302)
+
+muni <- read_municipality(year = 2025, code_muni=	
+3303302)
+
+#brasil schools ####
+
+ggplot() +
+  geom_sf(data = schools,
+          color = "orange",
+          size = 0.1) +
+  theme(
+    panel.grid       = element_blank(),
+ 
+    panel.background = element_rect(fill = "#ffe8d3"),
+ 
+  )+
+
+  annotation_scale(
+    location   = "bl",
+    width_hint = 0.2,
+    text_cex   = 0.6,
+    line_width = 0.7,
+  ) +
+
+  annotation_north_arrow(location = "tr",
+                         style = north_arrow_fancy_orienteering)+
+
+  labs(
+    title = "Distribuição das Escolas no Brasil"
+  )
+
+#muni schools ####
+
+ggplot() +
+  geom_sf(data = muni,
+          fill = "white",
+          color = "black") +
+  geom_sf(data = schools_muni,
+          color = "orange",
+          size = 1.5) +
+  theme(
+    panel.grid = element_blank(),
+ 
+    panel.background = element_rect(fill = "#ffe8d3"),
+ 
+  )+
+
+  annotation_scale(
+    location   = "bl",
+    width_hint = 0.2,
+    text_cex   = 0.6,
+    line_width = 0.7,
+  ) +
+
+  annotation_north_arrow(location = "tr",
+                         style = north_arrow_fancy_orienteering)+
+
+  labs(
+    title = "Distribuição das em Niterói/RJ"
+  )
+
+# states schools ####
+
+ggplot() +
+  geom_sf(data = states,
+          fill = "white",
+          color = "black") +
+  geom_sf(data = schools,
+          color = "orange",
+          size = 0.1) +
+  theme(
+    panel.grid       = element_blank(),
+ 
+    panel.background = element_rect(fill = "#ffe8d3"),
+ 
+  )+
+
+  annotation_scale(
+    location   = "bl",
+    width_hint = 0.2,
+    text_cex   = 0.6,
+    line_width = 0.7,
+  ) +
+
+  annotation_north_arrow(location = "tr",
+                         style = north_arrow_fancy_orienteering)+
+
+  labs(
+    title = "Distribuição das Escolas no Brasil"
+  )
+
+# brasil ####
+
+brasil_semi = ggplot() +
+  geom_sf(data = map_brasil2,
+          fill = "white", color = "black", linewidth = 0.2) +
+  geom_sf(data = Dados_semi,
+          fill = "#C86734", color = "white", linewidth = 0.03) +
+
+  annotation_scale(
+    location   = "bl",
+    width_hint = 0.2,
+    text_cex   = 0.6,
+    line_width = 0.7,
+  ) +
+
+  annotation_north_arrow(location = "tr",
+                         style = north_arrow_fancy_orienteering)+
+  labs(title = "Brasil") +
+  theme_minimal() +
+  theme(
+    plot.title = element_text(
+      face = "bold",
+      size = 20,
+      color = "black",
+      hjust = 0.5),
+    
+    panel.grid       = element_blank(),
+    axis.text        = element_blank(),
+
+    panel.background = element_rect(fill = "#ffe8d3"),
+    
+    panel.border = element_rect(
+      color     = "#C86734",
+      fill      = NA,
+      linewidth = 0.5
+    )
+  )
+brasil_semi
+
+# nordeste / sudeste ####
+
+map_semi_reg = ggplot() +
+  geom_sf(data = map_regioes,
+          fill = "white", color = "black", linewidth = 0.2) +
+  geom_sf(data = Dados_semi,
+          fill = "#C86734", color = "white", linewidth = 0.03) +
+
+    annotation_scale(
+    location   = "bl",
+    width_hint = 0.2,
+    text_cex   = 0.6,
+    line_width = 0.7
+  ) +
+  
+  annotation_north_arrow(location = "tr",
+                         style = north_arrow_fancy_orienteering)+
+  
+  labs(title = "Semiárido: Nordeste / Sudeste") +
+  
+  theme_minimal() +
+  
+  theme(
+    plot.title = element_text(
+      face = "bold",
+      size = 20,
+      color = "black",
+      hjust = 0.5
+    ),
+    
+    panel.grid       = element_blank(),
+    axis.text        = element_blank(),
+    
+    panel.background = element_rect(fill = "#ffe8d3"),
+    
+    panel.border = element_rect(
+      color     = "#C86734",
+      fill      = NA,
+      linewidth = 0.5
+    )
+  )
+map_semi_reg
+
+```
+
+
 # **Função read_schools**{data-background-image="Capa.png" style="text-align:center"}
 
 ## **O que a base representa?**
@@ -31,25 +271,25 @@ A função **read_schools()** disponibiliza a localização geográfica das esco
 :::: columns
 
 ::: {.column width="50%"}
-::: box-orange
+::: box-gray
 **Características principais:**
 
-- Dados oficiais do INEP;
-- Cada registro representa uma escola;
-- Geometria do tipo POINT;
-- Sistema de referência: SIRGAS 2000 (CRS 4674).
-- Nível territorial: Estabelecimento de ensino (escola).
+* Dados oficiais do INEP;
+* Cada registro representa uma escola;
+* Geometria do tipo POINT;
+* Sistema de referência: SIRGAS 2000 (CRS 4674).
+* Nível territorial: Estabelecimento de ensino (escola).
 :::
 :::
 
 ::: {.column width="45%"}
-::: box-orange
+::: box-gray
 **Aplicações:**
 
-- Planejamento educacional;
-- Estudos de acessibilidade;
-- Distribuição espacial das escolas;
-- Análises territoriais.
+* Planejamento educacional;
+* Estudos de acessibilidade;
+* Distribuição espacial das escolas;
+* Análises territoriais.
 :::
 :::
 
@@ -88,7 +328,7 @@ schools <- read_schools( <br>
 
 <br>
 
-::: box-orange
+::: box-gray
 **Retorno**
  Classe: > [1] "sf" "data.frame"
 :::
@@ -100,14 +340,14 @@ schools <- read_schools( <br>
 
 ### Informações disponíveis
 
-- Código da escola;
-- Nome da escola;
-- Município;
-- UF;
-- Coordenadas geográficas;
-- Data de atualização;
-- Geometria espacial.
-- Novidades da atualização
+* Código da escola;
+* Nome da escola;
+* Município;
+* UF;
+* Coordenadas geográficas;
+* Data de atualização;
+* Geometria espacial.
+* Novidades da atualização
 
 ### A nova versão do geobr
 
@@ -120,39 +360,121 @@ schools <- read_schools( <br>
 
 :::
 
-## **Mapa: Escolas do Brasil**
+## **Mapa: Escolas do Brasil (2025)**
 
-<br>
+![](Grafico_schools.png){fig-align="center" width=70%}
 
-![](Grafico_schools.png){fig-align="center" height=100%}
+## **Sobreposição com read_states**
 
-
-## **Sobreposição com read_states **
-
-<br>
-
-![](Grafico_schools_states.png){fig-align="center" height="100%"}
+![](Grafico_schools_states.png){fig-align="center" width=70%}
 
 ## Sobreposição com read_municipality
 
-<br>
+![](Grafico_schools_muni.png){fig-align="center" width=70%}
 
-![](Grafico_schools_muni.png){fig-align="center" height="100%"}
 
 ## 
 **Interpretação**
 
 <br>
 
-- Cada ponto representa uma escola;
-- Maior concentração nas áreas urbanizadas;
-- Permite visualizar a distribuição espacial tanto nacional, quanto municipal.
+* Cada ponto representa uma escola;
+* Maior concentração nas áreas urbanizadas;
+* Permite visualizar a distribuição espacial tanto nacional, quanto municipal.
+
+
+# **Função read_semiarid**{data-background-image="Capa.png" style="text-align:center"}
+
+## Semiárido
+
+<br>
+
+:::: columns
+
+::: {.column width="50%"}
+::: box-orange
+**Características principais:**
+
+* Dados oficiais do IBGE / SUDENE (Superintendência do Desenvolvimento do Nordeste);
+* Delimitação geográfica oficial;
+* Geometria do tipo MULTIPOLYGON;
+* Sistema de referência: SIRGAS 2000 (CRS 4674).
+* Nível territorial: Região geoecológica (recorte por municípios).
+
+:::
+:::
+
+::: {.column width="45%"}
+::: box-orange
+**Aplicações:**
+
+* Formulação de políticas públicas regionais;
+* Estudos sobre vulnerabilidade climática e seca;
+* Planejamento econômico da área de atuação da SUDENE;
+* Análises de governança e fundos constitucionais.
+
+:::
+:::
+
+::::
+
+
+## **Explorando a função**
+
+**Sintaxe**
+
+:::: columns
+
+::: {.column width="35%"}
+library(geobr)
+
+read_semiarid(<br>
+  year,<br>
+  simplified = TRUE,<br>
+  output = "sf",<br>
+  showProgress = TRUE,<br>
+  cache = TRUE,<br>
+  verbose = TRUE)
+:::
+
+::: {.column width="60%"}
+| Argumento    | Função                               |
+| ------------ | -------------------------------------|
+| year         | ano da base                          |
+| simplified    | simplifica as linhas para carregar mais rápido        |
+| output       | tipo de objeto retornado pela função |
+| showProgress | exibe progresso                      |
+| cache        | salva localmente                     |
+| verbose      | apresenta mensagens informativas     |
+
+:::
+::::
+
+<br>
+
+::: box-orange
+**Retorno**
+ Classe: > [1] "sf" "data.frame"
+:::
+
+## **Mapa Semiárido (2022)**
+
+![](brasil_semiarido){fig-align="center" width=70%}
+
+##
+
+![](ne_se_semiarido){fig-align="center" width=70%}
 
 ## **Conclusão**
 
 <br>
 
-✓ A função read_schools() acessa dados georreferenciados do Censo Escolar.
+
+:::: columns
+
+::: {.column width="50%"}
+::: box-gray
+✓ read_schools() acessa dados georreferenciados do Censo Escolar.
 
 ✓ Retorna objetos espaciais do tipo sf.
 
@@ -162,185 +484,21 @@ schools <- read_schools( <br>
 
 ✓ É útil para planejamento educacional, pesquisa e análise territorial.
 
-<br>
 
-**Fontes:**
-Documentação oficial do Geobr
-INEP — Censo Escolar
-
-
-
-
-
-
-# **PRIMEIRO CAPÍTULO**{data-background-image="Capa.png" style="text-align:center"}
-
-## **PRIMEIRA SEÇÃO**
-
-## **BLOCOS**
-
-::: box-blue
-Este é um bloco azul.
+:::
 :::
 
-::: box-green
-Este é um bloco verde.
-:::
-
-::: box-purple
-**TÍTULO OPCIONAL**
-
-Este é um bloco roxo.
-:::
-
+::: {.column width="45%"}
 ::: box-orange
-Este é um bloco laranja.
-:::
+✓ read_semiarid() acessa dados da delimitação legal do Semiárido brasileiro.
 
-## **LISTA NÃO ORDENADA**
+✓ Trabalha com geometrias do tipo multipolígono.
 
-::: box-blue
-- Estatística
-- Matemática
-- Programação
-:::
+✓ Permite analisar as atualizações históricas.
 
-## **LISTA NÃO ORDENADA ANINHADA**
-- Frutas
-    - Maçã
-    - Banana
-- Verduras
-    - Alface
-    - Cenoura
-    
-## LISTA ORDENADA
-
-:::box-orange
-1. Coletar dados
-2. Organizar informações
-3. Aplicar análise estatística
-:::
-
-## **LISTAS ORDENADAS ANINHADAS**
-
-1. Preparação
-    1. Coletar materiais
-    2. Definir objetivos
-2. Execução
-
-## **LISTA DE TAREFAS**
-
-::: box-purple
-- [x] Comprar leite
-- [ ] Estudar Quarto
-- [ ] Enviar relatório
-:::
-
-## **LINKS**
-Confira a documentação oficial do [Quarto](https://quarto.org).
-
-## **EQUAÇÕES**
-A reta é descrita por $y = mx + b$.
-
-Segue uma equação de destaque:
-$$
-y = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a}
-$$
-
-Mais exemplos:
-
-* Frações: $\frac{a}{b}$
-* Raiz quadrada: $\sqrt{x}$
-* Expoentes: $x^2$
-* Índices: $x_i$
-* Somatórios:  $\sum_{i=1}^{n} x_i$
-
-## **IMAGENS**
-![](Rstudio.png){style="width:50%;"}
-
-## **IMAGENS COM EDIÇÕES**
-![](Rstudio.png){fig-align="center" width=100%}
-
-## **TABELAS**
-| Disciplina     | Professor        | Horário   |
-|----------------|-----------------|-----------|
-| Estatística    | Prof. Guilherme | 08h-10h   |
-| Matemática     | Prof. Ana       | 10h-12h   |
-| Programação    | Prof. João      | 14h-16h   |
-
-| Produto | Preço | Quantidade |
-|:--------|------:|:----------:|
-| Lápis   |  1.50 |     10     |
-| Caderno | 12.00 |     5      |
-| Mochila | 75.00 |     1      |
-
-## **SLIDE COM ABAS**
-
-::: {.panel-tabset}
-
-### Aba 1
-
-Conteúdo da primeira aba.
-
-### Aba 2
-
-Conteúdo da segunda aba.
-
-### Aba 3
-
-Conteúdo da terceira aba.
+✓ Estudos de vulnerabilidade climática e planejamento socioeconômico regional.
 
 :::
-
-## Exemplo de colunas
-
-:::: columns
-
-::: {.column width="60%"}
-- Esta é a primeira coluna
-- Ela ocupa **60% da largura**
-:::
-
-::: {.column width="40%"}
-- Esta é a segunda coluna
-- Ela ocupa **40% da largura**
 :::
 
 ::::
-
-## *SCROLLING* {.scrollable}
-
-Este slide demonstra o uso da classe **scrollable**, que permite adicionar **rolagem vertical** quando o conteúdo é muito grande.
-
-Este é um exemplo de texto genérico utilizado apenas para preencher o slide e demonstrar como o conteúdo pode ultrapassar a altura da tela.
-
-- Item 1
-- Item 2
-- Item 3
-- Item 4
-- Item 5
-
-Quando há muito conteúdo, o slide normalmente ficaria visualmente sobrecarregado. Com o uso de `scrollable`, é possível manter tudo em um único slide e permitir que o usuário role o conteúdo.
-
-- Item A
-- Item B
-- Item C
-- Item D
-- Item E
-
-## **CRIANDO UMA CHUNK**
-```{r}
-x <- 1:10
-hist(x)
-```
-
-## CHUNK COM NOME
-```{r boxplot}
-x <- 1:10
-boxplot(x)
-```
-
-## **CHUNK PERSONALIZADA**
-```{r, fig.width=10, fig.height=4}
-hist(rnorm(100), col="skyblue", main="Histograma")
-```
