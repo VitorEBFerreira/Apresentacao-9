@@ -1,5 +1,5 @@
 ---
-title: "**PRÁTICA ESTATÍSTICA II**"
+title: "<span style='font-size: 50px; display: inline-block;'>**PRÁTICA ESTATÍSTICA II**</span>"
 subtitle: "<span style='font-size: 20px;'>**ATIVIDADE AVALIATIVA 9**</span>"
 author: "Agatha Dias Roque (<Agathadias@id.uff.br>) <br> Vitor Eduardo Bezerra Ferreira (<ferreiravitor@id.uff.br>)"
 date: today
