@@ -1,9 +1,9 @@
 ---
 title: "**PRÁTICA ESTATÍSTICA II**"
-subtitle: "**ATIVIDADE AVALIATIVA 0**"
-author: "Nome1 (<seuemail1@id.uff.br>) <br> Nome2 (<seuemail2@id.uff.br>)"
+subtitle: "**ATIVIDADE AVALIATIVA 9**"
+author: "Agatha Dias Roque (<Agathadias@id.uff.br>) <br> Vitor Eduardo Bezerra Ferreira (<ferreiravitor@id.uff.br>)"
 date: today
-date-format: "DD/MM/YYYY"
+date-format: "01/06/2023"
 institute: "Universidade Federal Fluminense"
 format:
   revealjs:
@@ -124,16 +124,20 @@ schools <- read_schools( <br>
 
 <br>
 
-![](Grafico_distribuicao_schools_1.png){fig-align="center" height=100%}
+![](Grafico_schools.png){fig-align="center" height=100%}
 
 
-## **Sobreposição de camadas **
+## **Sobreposição com read_states **
+
+<br>
+
+![](Grafico_schools_states.png){fig-align="center" height="100%"}
+
+## Sobreposição com read_municipality
 
 <br>
 
-![](Grafico_sobreposicao_schools_1.png){fig-align="center" height="100%"}
-
-<br>
+![](Grafico_schools_muni.png){fig-align="center" height="100%"}
 
 ## 
 **Interpretação**
@@ -142,7 +146,7 @@ schools <- read_schools( <br>
 
 - Cada ponto representa uma escola;
 - Maior concentração nas áreas urbanizadas;
-- Permite visualizar a distribuição espacial nacional.
+- Permite visualizar a distribuição espacial tanto nacional, quanto municipal.
 
 ## **Conclusão**
 
@@ -163,6 +167,10 @@ schools <- read_schools( <br>
 **Fontes:**
 Documentação oficial do Geobr
 INEP — Censo Escolar
+
+
+
+
 
 
 # **PRIMEIRO CAPÍTULO**{data-background-image="Capa.png" style="text-align:center"}

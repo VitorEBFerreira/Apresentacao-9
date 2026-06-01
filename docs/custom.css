@@ -39,7 +39,7 @@
 .reveal .title-slide {
   background: linear-gradient(
     135deg,
-    #726b5f
+    #ffffff
   );
   color: #336699;
 }
@@ -47,7 +47,7 @@
 .reveal .title-slide h1,
 .reveal .title-slide h2,
 .reveal .title-slide p {
-  color: white;
+  color: #726b5f;
 }
 
 /* ===== Texto ===== */
