@@ -149,6 +149,26 @@ Agatha Dias Roque (<a href="mailto:Agathadias@id.uff.br" class="email">Agathadia
   <p class="date">01/06/2023</p>
 </section>
 <section>
+<section id="geobr" class="title-slide slide level1 center" data-background-image="Capa.png" style="text-align:center">
+<h1><strong>GEOBR</strong></h1>
+
+</section>
+<section id="o-que-é-o-geobr" class="slide level2">
+<h2><strong>O que é o Geobr?</strong></h2>
+<p><br></p>
+<p>O pacote <strong>geobr</strong> é uma biblioteca em R desenvolvida pelo Instituto de Pesquisa Econômica Aplicada (IPEA) que permite acessar bases espaciais oficiais do Brasil de forma simples.</p>
+<p><br></p>
+<p><strong>Características:</strong></p>
+<ul>
+<li>Integra dados do IBGE em conjunto com outros órgãos oficiais;</li>
+<li>Retorna objetos espaciais no formato sf;</li>
+<li>Permite análise geográfica e construção de mapas;</li>
+<li>Facilita pesquisas acadêmicas e aplicações governamentais.</li>
+</ul>
+<p><br></p>
+<p>A versão 2.0 trouxe melhorias importantes de desempenho, armazenamento e precisão espacial.</p>
+</section></section>
+<section>
 <section id="função-read_schools" class="title-slide slide level1 center" data-background-image="Capa.png" style="text-align:center">
 <h1><strong>Função read_schools</strong></h1>
 
@@ -158,7 +178,7 @@ Agatha Dias Roque (<a href="mailto:Agathadias@id.uff.br" class="email">Agathadia
 <p>A função <strong>read_schools()</strong> disponibiliza a localização geográfica das escolas brasileiras a partir dos dados do Censo Escolar.</p>
 <div class="columns">
 <div class="column" style="width:50%;">
-<div class="box-gray">
+<div class="box-orange">
 <p><strong>Características principais:</strong></p>
 <ul>
 <li>Dados oficiais do INEP;</li>
@@ -169,7 +189,7 @@ Agatha Dias Roque (<a href="mailto:Agathadias@id.uff.br" class="email">Agathadia
 </ul>
 </div>
 </div><div class="column" style="width:45%;">
-<div class="box-gray">
+<div class="box-orange">
 <p><strong>Aplicações:</strong></p>
 <ul>
 <li>Planejamento educacional;</li>
@@ -182,9 +202,9 @@ Agatha Dias Roque (<a href="mailto:Agathadias@id.uff.br" class="email">Agathadia
 </section>
 <section id="explorando-a-função" class="slide level2">
 <h2><strong>Explorando a função</strong></h2>
-<p><strong>Sintaxe</strong></p>
 <div class="columns">
 <div class="column" style="width:35%;">
+<p><strong>Sintaxe</strong></p>
 <p>library(geobr)</p>
 <p>schools &lt;- read_schools( <br> year,<br> code_muni = “all”,<br> output = “sf”,<br> showProgress = TRUE,<br> cache = TRUE,<br> verbose = TRUE )</p>
 </div><div class="column" style="width:60%;">
@@ -224,7 +244,7 @@ Agatha Dias Roque (<a href="mailto:Agathadias@id.uff.br" class="email">Agathadia
 </table>
 </div></div>
 <p><br></p>
-<div class="box-gray">
+<div class="box-orange">
 <p><strong>Retorno</strong> Classe: &gt; [1] “sf” “data.frame”</p>
 </div>
 </section>
@@ -252,6 +272,7 @@ Agatha Dias Roque (<a href="mailto:Agathadias@id.uff.br" class="email">Agathadia
 <li>integração com formatos modernos;</li>
 <li>melhoria na qualidade das coordenadas espaciais.</li>
 </ol>
+<p><br></p>
 <p><strong>Objetivo principal:</strong> aumentar velocidade e confiabilidade das análises.</p>
 </div>
 </div>
@@ -332,10 +353,6 @@ Agatha Dias Roque (<a href="mailto:Agathadias@id.uff.br" class="email">Agathadia
 <p>read_semiarid(<br> year,<br> simplified = TRUE,<br> output = “sf”,<br> showProgress = TRUE,<br> cache = TRUE,<br> verbose = TRUE)</p>
 </div><div class="column" style="width:60%;">
 <table class="caption-top">
-<colgroup>
-<col style="width: 24%">
-<col style="width: 75%">
-</colgroup>
 <thead>
 <tr class="header">
 <th>Argumento</th>
@@ -396,8 +413,9 @@ Agatha Dias Roque (<a href="mailto:Agathadias@id.uff.br" class="email">Agathadia
 <p><br></p>
 <div class="columns">
 <div class="column" style="width:50%;">
-<div class="box-gray">
-<p>✓ read_schools() acessa dados georreferenciados do Censo Escolar.</p>
+<div class="box-orange">
+<p><strong>read_schools()</strong></p>
+<p>✓ Acessa dados georreferenciados do Censo Escolar.</p>
 <p>✓ Retorna objetos espaciais do tipo sf.</p>
 <p>✓ Trabalha com geometrias do tipo ponto.</p>
 <p>✓ Permite visualização espacial simples e sobreposição com outras camadas do geobr.</p>
@@ -405,7 +423,8 @@ Agatha Dias Roque (<a href="mailto:Agathadias@id.uff.br" class="email">Agathadia
 </div>
 </div><div class="column" style="width:45%;">
 <div class="box-orange">
-<p>✓ read_semiarid() acessa dados da delimitação legal do Semiárido brasileiro.</p>
+<p><strong>read_semiarid()</strong></p>
+<p>✓ Acessa dados da delimitação legal do Semiárido brasileiro.</p>
 <p>✓ Trabalha com geometrias do tipo multipolígono.</p>
 <p>✓ Permite analisar as atualizações históricas.</p>
 <p>✓ Estudos de vulnerabilidade climática e planejamento socioeconômico regional.</p>
@@ -628,82 +647,6 @@ Agatha Dias Roque (<a href="mailto:Agathadias@id.uff.br" class="email">Agathadia
         ]
       });
     </script>
-    
-
-    <script>
-
-      // htmlwidgets need to know to resize themselves when slides are shown/hidden.
-
-      // Fire the "slideenter" event (handled by htmlwidgets.js) when the current
-
-      // slide changes (different for each slide format).
-
-      (function () {
-
-        // dispatch for htmlwidgets
-
-        function fireSlideEnter() {
-
-          const event = window.document.createEvent("Event");
-
-          event.initEvent("slideenter", true, true);
-
-          window.document.dispatchEvent(event);
-
-        }
-
-    
-
-        function fireSlideChanged(previousSlide, currentSlide) {
-
-          fireSlideEnter();
-
-    
-
-          // dispatch for shiny
-
-          if (window.jQuery) {
-
-            if (previousSlide) {
-
-              window.jQuery(previousSlide).trigger("hidden");
-
-            }
-
-            if (currentSlide) {
-
-              window.jQuery(currentSlide).trigger("shown");
-
-            }
-
-          }
-
-        }
-
-    
-
-        // hookup for slidy
-
-        if (window.w3c_slidy) {
-
-          window.w3c_slidy.add_observer(function (slide_num) {
-
-            // slide_num starts at position 1
-
-            fireSlideChanged(null, w3c_slidy.slides[slide_num - 1]);
-
-          });
-
-        }
-
-    
-
-      })();
-
-    </script>
-
-    
-
     <script id="quarto-html-after-body" type="application/javascript">
       window.document.addEventListener("DOMContentLoaded", function (event) {
         const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")

@@ -21,245 +21,27 @@ format:
       data-background-size: cover
 ---
 
-```{r,include=F}
 
-# bibliotecas ####
+# **GEOBR**{data-background-image="Capa.png" style="text-align:center"}
 
-require(dplyr) # Manipulação de bases de dados
-require(geobr) # Shapefiles do Brasil
-require(ggiraph) # Mapas interativos
-require(ggplot2) # Gráficos
-require(ggsflabel) # Criação de Labels que se repelem
-require(ggspatial) # Rosa dos ventos e escala
-require(readxl) # Leitura de arquivos excel
-require(sf) # Leitura de shapefiles fora do geobr
-require(gtsummary)
-require(openxlsx)
-remotes::install_github("ipeaGIT/geobr", subdir = "r-package")
-devtools::install_github("yutannihilation/ggsflabel")
+## **O que é o Geobr?**
 
-# Dados ####
+<br>
 
-Indicadores = read_excel("Indicadores_Municipais.xlsx")
+O pacote **geobr** é uma biblioteca em R desenvolvida pelo Instituto de Pesquisa Econômica Aplicada (IPEA) que permite acessar bases espaciais oficiais do Brasil de forma simples.
 
-args(read_schools)
-Dados_escola = read_schools(year = 2025,
-                            showProgress = F)
+<br>
 
-no_esc = read_schools(year = 2025,
-                      showProgress = F) %>% 
-  filter(!st_is_empty(geometry)) %>%
-  nrow()
-no_esc
+**Características:**
 
-args(read_semiarid)
-Dados_semi = read_semiarid(year = 2022,
-                           simplified = T,
-                           showProgress = T)
+- Integra dados do IBGE em conjunto com outros órgãos oficiais;
+- Retorna objetos espaciais no formato sf;
+- Permite análise geográfica e construção de mapas;
+- Facilita pesquisas acadêmicas e aplicações governamentais.
 
-no_semi = read_semiarid(year = 2022,
-                       simplified = T,
-                      showProgress = F) %>% 
-  filter(!st_is_empty(geometry)) %>%
-  nrow()
-no_semi
+<br>
 
-map_brasil2 = read_country(year=2022,
-                     simplified = T,
-                     showProgress = F)
-  
-regioes_br = read_region(year = 2022,
-                         simplified = T,
-                         showProgress = F)
-
-estados_br = read_state(code_state = "all",
-                        year = 2022, simplified = T,
-                        showProgress = F)
-
-map_regioes = estados_br %>% 
-  filter(code_region %in% c(2, 3))
-
-schools <- read_schools(year=2025)
-
-states <- read_state(year=2025)
-
-schools_muni <- schools %>% 
-  filter(code_muni == 3303302)
-
-muni <- read_municipality(year = 2025, code_muni=	
-3303302)
-
-#brasil schools ####
-
-ggplot() +
-  geom_sf(data = schools,
-          color = "orange",
-          size = 0.1) +
-  theme(
-    panel.grid       = element_blank(),
- 
-    panel.background = element_rect(fill = "#ffe8d3"),
- 
-  )+
-
-  annotation_scale(
-    location   = "bl",
-    width_hint = 0.2,
-    text_cex   = 0.6,
-    line_width = 0.7,
-  ) +
-
-  annotation_north_arrow(location = "tr",
-                         style = north_arrow_fancy_orienteering)+
-
-  labs(
-    title = "Distribuição das Escolas no Brasil"
-  )
-
-#muni schools ####
-
-ggplot() +
-  geom_sf(data = muni,
-          fill = "white",
-          color = "black") +
-  geom_sf(data = schools_muni,
-          color = "orange",
-          size = 1.5) +
-  theme(
-    panel.grid = element_blank(),
- 
-    panel.background = element_rect(fill = "#ffe8d3"),
- 
-  )+
-
-  annotation_scale(
-    location   = "bl",
-    width_hint = 0.2,
-    text_cex   = 0.6,
-    line_width = 0.7,
-  ) +
-
-  annotation_north_arrow(location = "tr",
-                         style = north_arrow_fancy_orienteering)+
-
-  labs(
-    title = "Distribuição das em Niterói/RJ"
-  )
-
-# states schools ####
-
-ggplot() +
-  geom_sf(data = states,
-          fill = "white",
-          color = "black") +
-  geom_sf(data = schools,
-          color = "orange",
-          size = 0.1) +
-  theme(
-    panel.grid       = element_blank(),
- 
-    panel.background = element_rect(fill = "#ffe8d3"),
- 
-  )+
-
-  annotation_scale(
-    location   = "bl",
-    width_hint = 0.2,
-    text_cex   = 0.6,
-    line_width = 0.7,
-  ) +
-
-  annotation_north_arrow(location = "tr",
-                         style = north_arrow_fancy_orienteering)+
-
-  labs(
-    title = "Distribuição das Escolas no Brasil"
-  )
-
-# brasil ####
-
-brasil_semi = ggplot() +
-  geom_sf(data = map_brasil2,
-          fill = "white", color = "black", linewidth = 0.2) +
-  geom_sf(data = Dados_semi,
-          fill = "#C86734", color = "white", linewidth = 0.03) +
-
-  annotation_scale(
-    location   = "bl",
-    width_hint = 0.2,
-    text_cex   = 0.6,
-    line_width = 0.7,
-  ) +
-
-  annotation_north_arrow(location = "tr",
-                         style = north_arrow_fancy_orienteering)+
-  labs(title = "Brasil") +
-  theme_minimal() +
-  theme(
-    plot.title = element_text(
-      face = "bold",
-      size = 20,
-      color = "black",
-      hjust = 0.5),
-    
-    panel.grid       = element_blank(),
-    axis.text        = element_blank(),
-
-    panel.background = element_rect(fill = "#ffe8d3"),
-    
-    panel.border = element_rect(
-      color     = "#C86734",
-      fill      = NA,
-      linewidth = 0.5
-    )
-  )
-brasil_semi
-
-# nordeste / sudeste ####
-
-map_semi_reg = ggplot() +
-  geom_sf(data = map_regioes,
-          fill = "white", color = "black", linewidth = 0.2) +
-  geom_sf(data = Dados_semi,
-          fill = "#C86734", color = "white", linewidth = 0.03) +
-
-    annotation_scale(
-    location   = "bl",
-    width_hint = 0.2,
-    text_cex   = 0.6,
-    line_width = 0.7
-  ) +
-  
-  annotation_north_arrow(location = "tr",
-                         style = north_arrow_fancy_orienteering)+
-  
-  labs(title = "Semiárido: Nordeste / Sudeste") +
-  
-  theme_minimal() +
-  
-  theme(
-    plot.title = element_text(
-      face = "bold",
-      size = 20,
-      color = "black",
-      hjust = 0.5
-    ),
-    
-    panel.grid       = element_blank(),
-    axis.text        = element_blank(),
-    
-    panel.background = element_rect(fill = "#ffe8d3"),
-    
-    panel.border = element_rect(
-      color     = "#C86734",
-      fill      = NA,
-      linewidth = 0.5
-    )
-  )
-map_semi_reg
-
-```
-
+A versão 2.0 trouxe melhorias importantes de desempenho, armazenamento e precisão espacial.
 
 # **Função read_schools**{data-background-image="Capa.png" style="text-align:center"}
 
@@ -271,7 +53,7 @@ A função **read_schools()** disponibiliza a localização geográfica das esco
 :::: columns
 
 ::: {.column width="50%"}
-::: box-gray
+::: box-orange
 **Características principais:**
 
 * Dados oficiais do INEP;
@@ -283,7 +65,7 @@ A função **read_schools()** disponibiliza a localização geográfica das esco
 :::
 
 ::: {.column width="45%"}
-::: box-gray
+::: box-orange
 **Aplicações:**
 
 * Planejamento educacional;
@@ -292,16 +74,15 @@ A função **read_schools()** disponibiliza a localização geográfica das esco
 * Análises territoriais.
 :::
 :::
-
 ::::
 
 ## **Explorando a função**
 
-**Sintaxe**
-
 :::: columns
 
 ::: {.column width="35%"}
+**Sintaxe**
+
 library(geobr)
 
 schools <- read_schools( <br>
@@ -322,13 +103,12 @@ schools <- read_schools( <br>
 | showProgress | exibe progresso                      |
 | cache        | salva localmente                     |
 | verbose      | apresenta mensagens informativas     |
-
 :::
 ::::
 
 <br>
 
-::: box-gray
+::: box-orange
 **Retorno**
  Classe: > [1] "sf" "data.frame"
 :::
@@ -355,6 +135,8 @@ schools <- read_schools( <br>
 2. armazenamento mais eficiente;
 3. integração com formatos modernos;
 4. melhoria na qualidade das coordenadas espaciais.
+
+<br>
 
 **Objetivo principal:** aumentar velocidade e confiabilidade das análises.
 
@@ -438,14 +220,14 @@ read_semiarid(<br>
 :::
 
 ::: {.column width="60%"}
-| Argumento    | Função                               |
-| ------------ | -------------------------------------|
-| year         | ano da base                          |
-| simplified    | simplifica as linhas para carregar mais rápido        |
-| output       | tipo de objeto retornado pela função |
-| showProgress | exibe progresso                      |
-| cache        | salva localmente                     |
-| verbose      | apresenta mensagens informativas     |
+| Argumento    | Função                                         |
+| ------------ | -----------------------------------------------|
+| year         | ano da base                                    |
+| simplified   | simplifica as linhas para carregar mais rápido |
+| output       | tipo de objeto retornado pela função           |
+| showProgress | exibe progresso                                |
+| cache        | salva localmente                               |
+| verbose      | apresenta mensagens informativas               |
 
 :::
 ::::
@@ -459,11 +241,11 @@ read_semiarid(<br>
 
 ## **Mapa Semiárido (2022)**
 
-![](brasil_semiarido){fig-align="center" width=70%}
+![](brasil_semiarido.png){fig-align="center" width=70%}
 
 ##
 
-![](ne_se_semiarido){fig-align="center" width=70%}
+![](ne_se_semiarido.png){fig-align="center" width=70%}
 
 ## **Conclusão**
 
@@ -473,8 +255,10 @@ read_semiarid(<br>
 :::: columns
 
 ::: {.column width="50%"}
-::: box-gray
-✓ read_schools() acessa dados georreferenciados do Censo Escolar.
+::: box-orange
+**read_schools()**
+
+✓ Acessa dados georreferenciados do Censo Escolar.
 
 ✓ Retorna objetos espaciais do tipo sf.
 
@@ -490,7 +274,9 @@ read_semiarid(<br>
 
 ::: {.column width="45%"}
 ::: box-orange
-✓ read_semiarid() acessa dados da delimitação legal do Semiárido brasileiro.
+**read_semiarid()** 
+
+✓ Acessa dados da delimitação legal do Semiárido brasileiro.
 
 ✓ Trabalha com geometrias do tipo multipolígono.
 
